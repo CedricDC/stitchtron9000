@@ -18,12 +18,8 @@ find_package(catkin REQUIRED COMPONENTS
     std_msgs
     )
 
-add_message_files(DIRECTORY
-  msg
-  )
-generate_messages(DEPENDENCIES
-  std_msgs
-  )
+add_message_files(DIRECTORY msg)
+generate_messages(DEPENDENCIES std_msgs)
 
 catkin_package(
   INCLUDE_DIRS include
@@ -35,4 +31,5 @@ include_directories(
   ${OpenCV_INCLUDE_DIRS}
 )
 
+add_subdirectory(src/extractor)
 include(Mosaicer.txt)
