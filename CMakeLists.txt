@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
     dynamic_reconfigure
     nodelet
     image_transport
+    cv_bridge
     )
 
 catkin_package(
