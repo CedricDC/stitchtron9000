@@ -14,7 +14,16 @@ find_package(catkin REQUIRED COMPONENTS
     nodelet
     image_transport
     cv_bridge
+    message_generation
+    std_msgs
     )
+
+add_message_files(DIRECTORY
+  msg
+  )
+generate_messages(DEPENDENCIES
+  std_msgs
+  )
 
 catkin_package(
   INCLUDE_DIRS include

@@ -9,6 +9,8 @@
 #include <image_transport/subscriber_filter.h>
 #include <sensor_msgs/Image.h>
 
+#include <stitchtron9000/Homography.h>
+
 #include <memory>
 
 #ifndef MOSAICER_NODE_HPP
