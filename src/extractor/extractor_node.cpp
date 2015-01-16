@@ -6,10 +6,18 @@ namespace extractor {
 
 ExtractorNode::ExtractorNode(const ros::NodeHandle& pnh) : pnh_(pnh), it_(pnh) {
   pnh_.param("queue_size", queue_size_, 5);
-  ros::SubscriberStatusCallback connect_cb =
-      boost::bind(&ExtractorNode::ConnectCb, this);
-  pub_key_frame_ =
-      pnh_.advertise<stitchtron9000::KeyFrame>("", 1, connect_cb, connect_cb);
+  image_transport::TransportHints hints("raw", ros::TransportHints(), pnh_);
+  sub_camera_ = it_.subscribeCamera("image", queue_size_,
+                                    &ExtractorNode::CameraCb, this, hints);
+  ROS_INFO("%s subscribing to %s.", pnh_.getNamespace().c_str(),
+           sub_camera_.getTopic().c_str());
+  pub_key_frame_ = pnh_.advertise<stitchtron9000::KeyFrame>("key_frame", 1);
+  ROS_INFO("%s publishing to %s.", pnh_.getNamespace().c_str(),
+           pub_key_frame_.getTopic().c_str());
+  //  ros::SubscriberStatusCallback connect_cb =
+  //      boost::bind(&ExtractorNode::ConnectCb, this);
+  //  pub_key_frame_ = pnh_.advertise<stitchtron9000::KeyFrame>(
+  //      "key_frame", 1, connect_cb, connect_cb);
 }
 
 void ExtractorNode::ConnectCb() {
