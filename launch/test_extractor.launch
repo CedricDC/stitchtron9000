@@ -1,0 +1,21 @@
+<launch>
+    <arg name="camera" default="color"/>
+
+    <arg name="bag_rate" default="1"/>
+    <arg name="output" default="screen"/>
+
+    <!-- rosbag -->
+    <node pkg="rosbag" type="play" name="player" output="$(arg output)"
+        args="-r $(arg bag_rate) /media/chao/Seagate/pennpark.bag">
+    </node>
+
+    <!-- image_proc -->
+    <node pkg="image_proc" type="image_proc" name="image_proc"
+        ns="$(arg camera)" output="$(arg output)">
+    </node>
+
+    <!-- extractor -->
+    <include file="$(find stitchtron9000)/launch/extractor.launch">
+        <arg name="camera" value="$(arg camera)"/>
+    </include> 
+</launch>
