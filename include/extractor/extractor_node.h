@@ -9,6 +9,7 @@
 #include <mutex>
 
 namespace s9000 {
+namespace extractor {
 
 class ExtractorNode {
  public:
@@ -27,6 +28,7 @@ class ExtractorNode {
   int queue_size_;
 };
 
+}  // namespace extractor
 }  // namespace s9000
 
 #endif  // STITCHTRON9000_EXTRACTOR_NODE_H_

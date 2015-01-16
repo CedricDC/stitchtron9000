@@ -1,12 +1,15 @@
 #include "extractor/extractor_node.h"
+#include <stitchtron9000/KeyFrame.h>
 
 namespace s9000 {
+namespace extractor {
 
 ExtractorNode::ExtractorNode(const ros::NodeHandle& pnh) : pnh_(pnh), it_(pnh) {
   pnh_.param("queue_size", queue_size_, 5);
-  image_transport::SubscriberStatusCallback connect_cb =
+  ros::SubscriberStatusCallback connect_cb =
       boost::bind(&ExtractorNode::ConnectCb, this);
-  pub_key_frame_ = it_.advertise("", 1, connect_cb, connect_cb);
+  pub_key_frame_ =
+      pnh_.advertise<stitchtron9000::KeyFrame>("", 1, connect_cb, connect_cb);
 }
 
 void ExtractorNode::ConnectCb() {
@@ -27,4 +30,5 @@ void ExtractorNode::CameraCb(const sensor_msgs::ImageConstPtr& image_msg,
   ROS_INFO("Inside CameraCb");
 }
 
+}  // namespace extractor
 }  // namespace s9000
