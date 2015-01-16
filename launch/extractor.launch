@@ -1,0 +1,15 @@
+<launch>
+    <arg name="camera" default="color"/>
+    <arg name="output" default="screen"/>
+    <arg name="queue_size" default="5"/>
+
+    <node pkg="stitchtron9000" type="extractor" name="extractor"
+        output="$(arg output)" ns="$(arg camera)">
+        <!-- parameters -->
+        <param name="queue_size" type="int" value="$(arg queue_size)"/>
+
+        <!-- remappings -->
+        <remap from="~image" to="image_rect_color"/>
+        <remap from="~camera_info" to="camera_info"/>
+    </node>
+</launch> 
