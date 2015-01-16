@@ -9,6 +9,8 @@
 #include <image_transport/subscriber_filter.h>
 #include <sensor_msgs/Image.h>
 
+#include <stitchtron9000/Homography.h>
+
 #include <memory>
 
 #ifndef MOSAICER_NODE_HPP
@@ -23,7 +25,12 @@ public:
   Node(const ros::NodeHandle& nh);
   
 private:
-    
+  
+  void callback(const sensor_msgs::ImageConstPtr&,
+                const sensor_msgs::CameraInfoConstPtr&);
+  
+  static constexpr size_t kROSQueueSize = 100;
+  
   ros::NodeHandle pnh_;
   std::shared_ptr<image_transport::ImageTransport> it_;
 
