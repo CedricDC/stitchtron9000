@@ -14,3 +14,4 @@ find_package(catkin REQUIRED COMPONENTS
     nodelet
     )
 
+include(Mosaicer.txt)
