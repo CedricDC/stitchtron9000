@@ -1,5 +1,10 @@
 #include "extractor/extractor_node.h"
+
+#include <cv_bridge/cv_bridge.h>
 #include <stitchtron9000/KeyFrame.h>
+#include <stitchtron9000/Homography.h>
+
+#include <opencv2/highgui/highgui.hpp>
 
 namespace s9000 {
 namespace extractor {
@@ -35,7 +40,13 @@ void ExtractorNode::ConnectCb() {
 
 void ExtractorNode::CameraCb(const sensor_msgs::ImageConstPtr& image_msg,
                              const sensor_msgs::CameraInfoConstPtr& cinfo_msg) {
-  ROS_INFO("Inside CameraCb");
+  const cv::Mat image =
+      cv_bridge::toCvShare(image_msg, image_msg->encoding)->image;
+  cv::imshow("image", image);
+  cv::waitKey(1);
+  stitchtron9000::KeyFrame key_frame;
+  key_frame.header = image_msg->header;
+  pub_key_frame_.publish(key_frame);
 }
 
 }  // namespace extractor

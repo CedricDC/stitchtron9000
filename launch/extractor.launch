@@ -11,5 +11,6 @@
         <!-- remappings -->
         <remap from="~image" to="image_rect_color"/>
         <remap from="~camera_info" to="camera_info"/>
+        <remap from="~key_frame" to="key_frame"/>
     </node>
 </launch> 
