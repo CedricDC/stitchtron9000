@@ -1,13 +1,13 @@
 <package format="2">
     <name>stitchtron9000</name>
-    <version>0.0.0</version>
-    <description>The stitchtron9000 package</description>
+    <version>0.0.1</version>
+    <description>Real-time aerial image stitching</description>
 
     <maintainer email="quchao@seas.upenn.edu">Chao</maintainer>
     <maintainer email="gcross@seas.upenn.edu">Gareth</maintainer>
     <maintainer email="cedricd@seas.upenn.edu">Cedric </maintainer>
 
-    <license>Whatever</license>
+    <license>Super top secret</license>
 
     <buildtool_depend>catkin</buildtool_depend>
 
@@ -17,6 +17,5 @@
     <depend>nodelet</depend>
 
     <export>
-        <!--<nodelet plugin="${prefix}/nodelet_plugins.xml"/>-->
     </export>
 </package>
