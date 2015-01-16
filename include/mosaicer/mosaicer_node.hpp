@@ -23,7 +23,12 @@ public:
   Node(const ros::NodeHandle& nh);
   
 private:
-    
+  
+  void callback(const sensor_msgs::ImageConstPtr&,
+                const sensor_msgs::CameraInfoConstPtr&);
+  
+  static constexpr size_t kROSQueueSize = 100;
+  
   ros::NodeHandle pnh_;
   std::shared_ptr<image_transport::ImageTransport> it_;
 
