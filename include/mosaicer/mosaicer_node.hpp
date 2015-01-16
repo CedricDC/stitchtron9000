@@ -27,7 +27,8 @@ public:
 private:
   
   void callback(const sensor_msgs::ImageConstPtr&,
-                const sensor_msgs::CameraInfoConstPtr&);
+                const sensor_msgs::CameraInfoConstPtr&,
+                const stitchtron9000::HomographyConstPtr&);
   
   static constexpr size_t kROSQueueSize = 100;
   
@@ -36,11 +37,12 @@ private:
 
   image_transport::SubscriberFilter sub_image_;
   message_filters::Subscriber<sensor_msgs::CameraInfo> sub_info_;
-  //message_filters::Subscriber<> sub_homo_;
+  message_filters::Subscriber<stitchtron9000::Homography> sub_homo_;
   
   typedef message_filters::sync_policies::ExactTime<
     sensor_msgs::Image,
-    sensor_msgs::CameraInfo> SyncPolicy;
+    sensor_msgs::CameraInfo,
+    stitchtron9000::Homography> SyncPolicy;
   std::shared_ptr<message_filters::Synchronizer<SyncPolicy>> sync_;
   
   ros::Publisher pub_image_;

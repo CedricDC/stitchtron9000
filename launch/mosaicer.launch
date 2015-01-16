@@ -1,0 +1,11 @@
+<launch>
+    <arg name="camera" default="color"/>
+    <arg name="output" default="screen"/>
+
+    <node pkg="stitchtron9000" type="mosaicer_node" name="mosaicer"
+        output="$(arg output)" ns="$(arg camera)">
+
+        <remap from="~image" to="image_rect_color"/>
+        <remap from="~camera_info" to="camera_info"/>
+    </node>
+</launch>
