@@ -28,11 +28,13 @@ void Node::callback(const sensor_msgs::ImageConstPtr& image,
                     const sensor_msgs::CameraInfoConstPtr& info, 
                     const stitchtron9000::HomographyConstPtr& homo) {
   
-  cv_bridge::CvImageConstPtr bridged = cv_bridge::toCvShare(image,"mono8");
+  cv_bridge::CvImageConstPtr bridged = cv_bridge::toCvShare(image);
   if (!bridged || bridged->image.empty()) {
     ROS_ERROR("Failed to convert image to mono8");
     return;
   }
+  
+  ROS_INFO("Received image, info and homography!!");
   
   /// @todo: make a mosaic
 }
