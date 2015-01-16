@@ -1,7 +1,7 @@
 <package format="2">
-    <name>driver</name>
+    <name>stitchtron9000</name>
     <version>0.0.0</version>
-    <description>The driver package</description>
+    <description>The stitchtron9000 package</description>
 
     <maintainer email="quchao@seas.upenn.edu">Chao</maintainer>
     <maintainer email="gcross@seas.upenn.edu">Gareth</maintainer>
