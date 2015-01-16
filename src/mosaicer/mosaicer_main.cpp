@@ -6,7 +6,7 @@
 int main(int argc, char ** argv) {
   ros::init(argc,argv,"mosaicer");
   ros::NodeHandle nh("~");
-  s9000::mosaicer::Node(nh);
+  s9000::mosaicer::Node mosaicer(nh);
   ros::spin();
   return 0;
 }

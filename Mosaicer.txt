@@ -1,0 +1,17 @@
+set(Mosaicer_NODE_SOURCES
+  src/mosaicer/mosaicer_node.cpp
+  src/mosaicer/mosaicer_main.cpp
+  )
+
+add_executable(mosaicer_node
+  ${Mosaicer_NODE_SOURCES}
+  )
+
+add_dependencies(mosaicer_node
+  ${catkin_EXPORTED_TARGETS}
+  )
+
+target_link_libraries(mosaicer_node
+  ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+  )
