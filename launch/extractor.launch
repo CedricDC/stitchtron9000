@@ -3,7 +3,7 @@
     <arg name="output" default="screen"/>
     <arg name="queue_size" default="5"/>
 
-    <node pkg="stitchtron9000" type="extractor" name="extractor"
+    <node pkg="stitchtron9000" type="extractor_node" name="extractor"
         output="$(arg output)" ns="$(arg camera)">
         <!-- parameters -->
         <param name="queue_size" type="int" value="$(arg queue_size)"/>
