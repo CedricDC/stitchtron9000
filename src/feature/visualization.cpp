@@ -2,7 +2,22 @@
 
 #include <opencv2/imgproc/imgproc.hpp>
 
-namespace isfm {
+namespace s9000 {
+namespace feature {
+
+void drawCorners(const cv::Mat &image, const std::vector<cv::Point2f> &corners,
+                 cv::Mat &image_out) {
+  if (image.type() == CV_8UC3) {
+    image.copyTo(image_out);
+  } else if (image.type() == CV_8UC1) {
+    cv::cvtColor(image, image_out, cv::COLOR_GRAY2BGR);
+  } else {
+    //    CV_Error(Error::StsBadArg, "Incorrect type of input image.\n");
+  }
+  for (const auto &p : corners) {
+    cv::circle(image_out, p, 1, CV_BLUE, -1, CV_AA);
+  }
+}
 
 void drawKeypoints(const std::vector<cv::KeyPoint> &keypoints, cv::Mat &image) {
   for (const cv::KeyPoint &keypoint : keypoints) {
@@ -31,5 +46,5 @@ void drawMatches(const cv::Mat &image1,
                   /* match color */ CV_RED, /* point color */ CV_GREEN, mask,
                   cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 }
-
-}  // namespace isfm
+}  // namesapce feature
+}  // namesapce s9000

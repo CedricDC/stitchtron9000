@@ -12,8 +12,8 @@ cv::Ptr<cv::Feature2D> Feature2D::create(const ros::NodeHandle &pnh,
   auto algo = cv::Feature2D::create(name);
 
   if (name == "BRISK") {
-    SetCvAlgorithmParam(algo, algo_nh, "thres", 4);
-    SetCvAlgorithmParam(algo, algo_nh, "octaves", 4);
+    setCvAlgorithmParam(algo, algo_nh, "thres", 4);
+    setCvAlgorithmParam(algo, algo_nh, "octaves", 4);
     //  } else if (name == "SIFT") {
     //    cv::initModule_nonfree();
     //    SetCvAlgorithmParam(algo, algo_nh, "nFeatures", 0);
@@ -44,27 +44,32 @@ cv::Ptr<cv::FeatureDetector> FeatureDetector::create(const ros::NodeHandle &pnh,
   return nullptr;
 }
 
-void PrintCvAlgorithmParams(cv::Algorithm *algorithm) {
+void printCvAlgorithmParams(cv::Algorithm *algo) {
   std::vector<std::string> params;
-  algorithm->getParams(params);
+  algo->getParams(params);
 
   for (const std::string &param_name : params) {
-    const auto type = algorithm->paramType(param_name);
-    const auto help_text = algorithm->paramHelp(param_name);
+    const auto type = algo->paramType(param_name);
+    const auto help_text = algo->paramHelp(param_name);
     std::string type_text;
 
+    std::cout << algo->name() << " parameter - value: ";
     switch (type) {
       case cv::Param::BOOLEAN:
         type_text = "bool";
+        std::cout << std::boolalpha << algo->getBool(param_name);
         break;
       case cv::Param::INT:
         type_text = "int";
+        std::cout << algo->getInt(param_name);
         break;
       case cv::Param::REAL:
         type_text = "real (double)";
+        std::cout << algo->getDouble(param_name);
         break;
       case cv::Param::STRING:
         type_text = "string";
+        std::cout << algo->getString(param_name);
         break;
       case cv::Param::MAT:
         type_text = "Mat";
@@ -76,7 +81,7 @@ void PrintCvAlgorithmParams(cv::Algorithm *algorithm) {
         type_text = "Mat vector";
         break;
     }
-    std::cout << "Parameter name: " << param_name << " type: " << type_text
+    std::cout << ", name: " << param_name << ", type: " << type_text
               << std::endl;
   }
 }

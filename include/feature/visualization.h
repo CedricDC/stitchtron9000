@@ -5,8 +5,15 @@
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#define CV_RED CV_RGB(255, 0, 0)
+#define CV_GREEN CV_RGB(0, 255, 0)
+#define CV_BLUE CV_RGB(0, 0, 255)
+
 namespace s9000 {
 namespace feature {
+
+void drawCorners(const cv::Mat &image, const std::vector<cv::Point2f> &corners,
+                 cv::Mat &image_out);
 
 void drawKeypoints(const std::vector<cv::KeyPoint> &keypoints, cv::Mat &image);
 
@@ -23,4 +30,5 @@ void drawMatches(const cv::Mat &image1,
 
 }  // namespace feature
 }  // namespace s9000
+
 #endif  // STITCHTRON9000_VISUALIZATION_H_

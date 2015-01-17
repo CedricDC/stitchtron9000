@@ -18,7 +18,7 @@ ExtractorNode::ExtractorNode(const ros::NodeHandle& pnh) : pnh_(pnh), it_(pnh) {
                                     &ExtractorNode::cameraCb, this, hints);
   ROS_INFO("%s subscribing to %s.", pnh_.getNamespace().c_str(),
            sub_camera_.getTopic().c_str());
-  pub_key_frame_ = pnh_.advertise<stitchtron9000::KeyFrame>("keyframe", 1);
+  pub_key_frame_ = pnh_.advertise<stitchtron9000::KeyFrame>("key_frame", 1);
   ROS_INFO("%s publishing to %s.", pnh_.getNamespace().c_str(),
            pub_key_frame_.getTopic().c_str());
   std::string algo_name;
@@ -27,6 +27,7 @@ ExtractorNode::ExtractorNode(const ros::NodeHandle& pnh) : pnh_(pnh), it_(pnh) {
   }
   feat2d_ = feature::Feature2D::create(pnh, algo_name);
   ROS_INFO("Feature2D %s", algo_name.c_str());
+  feature::printCvAlgorithmParams(feat2d_);
 
   //  ros::SubscriberStatusCallback connect_cb =
   //      boost::bind(&ExtractorNode::ConnectCb, this);
