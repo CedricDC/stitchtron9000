@@ -52,11 +52,12 @@ void ExtractorNode::connectCb() {
 void ExtractorNode::cameraCb(const sensor_msgs::ImageConstPtr& image_msg,
                              const sensor_msgs::CameraInfoConstPtr& cinfo_msg) {
   const cv::Mat image =
-      cv_bridge::toCvCopy(image_msg, sensor_msgs::image_encodings::MONO8)
-          ->image;
+      cv_bridge::toCvCopy(image_msg, image_msg->encoding)->image;
+  cv::Mat image_gray = feature::copyToGray(image);
+
   cv::Mat display;
   std::vector<cv::KeyPoint> keypoints;
-  feat2d_->detect(image, keypoints);
+  feat2d_->detect(image_gray, keypoints);
   feature::drawKeypoints(image, keypoints, display);
   cv::imshow("display", display);
   cv::waitKey(1);

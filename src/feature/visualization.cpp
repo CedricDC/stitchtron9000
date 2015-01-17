@@ -5,17 +5,36 @@
 namespace s9000 {
 namespace feature {
 
-void drawCorners(const cv::Mat &image, const std::vector<cv::Point2f> &corners,
-                 cv::Mat &image_out) {
+cv::Mat copyToGray(const cv::Mat &image) {
+  cv::Mat image_gray;
   if (image.type() == CV_8UC3) {
-    image.copyTo(image_out);
+    cv::cvtColor(image, image_gray, cv::COLOR_BGR2GRAY);
   } else if (image.type() == CV_8UC1) {
-    cv::cvtColor(image, image_out, cv::COLOR_GRAY2BGR);
+    image.copyTo(image_gray);
+  } else {
+    throw std::runtime_error("Incorrect type of input image.");
+  }
+  return image_gray;
+}
+
+cv::Mat copyToColor(const cv::Mat &image) {
+  cv::Mat image_color;
+  if (image.type() == CV_8UC3) {
+    image.copyTo(image_color);
+  } else if (image.type() == CV_8UC1) {
+    cv::cvtColor(image, image_color, cv::COLOR_GRAY2BGR);
   } else {
     //    CV_Error(Error::StsBadArg, "Incorrect type of input image.\n");
+    throw std::runtime_error("Incorrect type of input image.");
   }
-  for (const auto &p : corners) {
-    cv::circle(image_out, p, 1, CV_BLUE, -1, CV_AA);
+  return image_color;
+}
+
+void drawCorners(const cv::Mat &image, const std::vector<cv::Point2f> &corners,
+                 cv::Mat &image_out) {
+  image_out = copyToColor(image);
+  for (const auto &corner : corners) {
+    cv::circle(image_out, corner, 1, CV_BLUE, -1, CV_AA);
   }
 }
 
@@ -33,7 +52,7 @@ void drawKeypoints(const cv::Mat &image,
                     cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 }
 
-void drawMatches(const cv::Mat &image1,
+void drawTrackes(const cv::Mat &image1,
                  const std::vector<cv::Point2f> &corners1,
                  const cv::Mat &image2,
                  const std::vector<cv::Point2f> &corners2,

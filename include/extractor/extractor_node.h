@@ -28,6 +28,7 @@ class ExtractorNode {
   ros::Publisher pub_key_frame_;
   std::mutex connect_mutex_;
   cv::Ptr<cv::Feature2D> feat2d_;
+  std::vector<cv::KeyPoint> prev_keypoints_;
   int queue_size_;
 };
 

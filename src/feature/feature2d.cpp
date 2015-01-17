@@ -1,6 +1,6 @@
 #include "feature/feature2d.h"
 
-#include <opencv2/nonfree/nonfree.hpp>
+//#include <opencv2/nonfree/nonfree.hpp>
 
 namespace s9000 {
 namespace feature {
@@ -46,12 +46,13 @@ void printCvAlgorithmParams(cv::Algorithm *algo) {
   std::vector<std::string> params;
   algo->getParams(params);
 
+  std::cout << algo->name() << std::endl;
   for (const std::string &param_name : params) {
     const auto type = algo->paramType(param_name);
     const auto help_text = algo->paramHelp(param_name);
     std::string type_text;
 
-    std::cout << algo->name() << " parameter - value: ";
+    std::cout << "    parameter - value: ";
     switch (type) {
       case cv::Param::BOOLEAN:
         type_text = "bool";
