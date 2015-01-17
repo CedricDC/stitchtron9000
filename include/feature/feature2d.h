@@ -31,6 +31,21 @@ void setCvAlgorithmParam(cv::Algorithm* algo, const ros::NodeHandle& fnh,
 
 void printCvAlgorithmParams(cv::Algorithm* algo);
 
+template <typename T, typename U>
+void pruneByStatus(const std::vector<U>& status, std::vector<T>& objects) {
+  ROS_ASSERT_MSG(status.size() == objects.size(),
+                 "status and object size mismatch");
+  ROS_ASSERT_MSG(!status.empty(), "nothing to prune");
+  auto it_obj = objects.begin();
+  for (const auto& s : status) {
+    if (s) {
+      it_obj++;
+    } else {
+      it_obj = objects.erase(it_obj);
+    }
+  }
+}
+
 }  // namespace featur
 }  // namespace s9000
 
