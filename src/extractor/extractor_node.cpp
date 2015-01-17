@@ -1,8 +1,10 @@
 #include "extractor/extractor_node.h"
 
 #include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/image_encodings.h>
 #include <stitchtron9000/KeyFrame.h>
 #include <stitchtron9000/Homography.h>
+#include <feature/feature2d.h>
 
 #include <opencv2/highgui/highgui.hpp>
 
@@ -19,6 +21,13 @@ ExtractorNode::ExtractorNode(const ros::NodeHandle& pnh) : pnh_(pnh), it_(pnh) {
   pub_key_frame_ = pnh_.advertise<stitchtron9000::KeyFrame>("key_frame", 1);
   ROS_INFO("%s publishing to %s.", pnh_.getNamespace().c_str(),
            pub_key_frame_.getTopic().c_str());
+  std::string algo_name;
+  if (!pnh_.getParam("Feature2D", algo_name)) {
+    throw std::runtime_error("No Feature2D specified.");
+  }
+  feat2d_ = feature::Feature2D::create(pnh, algo_name);
+  ROS_INFO("Feature2D %s", algo_name.c_str());
+
   //  ros::SubscriberStatusCallback connect_cb =
   //      boost::bind(&ExtractorNode::ConnectCb, this);
   //  pub_key_frame_ = pnh_.advertise<stitchtron9000::KeyFrame>(
@@ -41,9 +50,14 @@ void ExtractorNode::ConnectCb() {
 void ExtractorNode::CameraCb(const sensor_msgs::ImageConstPtr& image_msg,
                              const sensor_msgs::CameraInfoConstPtr& cinfo_msg) {
   const cv::Mat image =
-      cv_bridge::toCvShare(image_msg, image_msg->encoding)->image;
+      cv_bridge::toCvCopy(image_msg, sensor_msgs::image_encodings::MONO8)
+          ->image;
+  std::vector<cv::Point2f> keypoints;
+  feat2d_->detect(image, keypoints);
   cv::imshow("image", image);
   cv::waitKey(1);
+
+  // Publish dummy message
   stitchtron9000::KeyFrame key_frame;
   key_frame.header = image_msg->header;
   pub_key_frame_.publish(key_frame);

@@ -1,0 +1,61 @@
+# Feature detector and descriptor
+# ==============================================================================
+# Default parameters for opencv SIFT
+# SIFT:
+#     nFeatures: 0              # 0 - detect all possible features
+#     nOctaveLayers: 3          # 3 - gives the highest repeatability
+#     contrastThreshold: 0.04   # remove low contrast extrema
+#     edgeThreshold: 10.0       # remove edges
+#     sigma: 1.6                # prior smoothing for each octave, close to optimal
+#     matcher: BruteForce       # FlannBased
+
+SIFT:
+    nFeatures: 0
+    contrastThreshold: 0.04
+    edgeThreshold: 10.0
+    matcher: FlannBased
+
+# ==============================================================================
+# Default parameters for opencv SURF
+# SURF:
+#     hessianThreshold: 100     # paper use 600, opencv example use 400
+#     nOctaves: 4
+#     nOctaveLayers: 3/2        # opencv doesn't agree
+#     extended: true            # true - 128, false - 64
+#     upright: false            # true - not rotation-invariant
+#     matcher: BruteForce       # FlannBased
+
+SURF:
+    hessianThreshold: 500.0
+    nOctaves: 4
+    nOctaveLayers: 3
+    matcher: FlannBased
+
+# ==============================================================================
+# Default parameters for 'opencv' AKAZE
+# AKAZE:
+#     nFeautres: 0              # 0 - detect all possible features
+#     oMax: 4
+#     nSubLevels: 4
+#     dThreshold: 0.001
+#     diffusivity: 1            # 0 - PM_G1, 1 - PM_G2, 2 - WEICKERT, 3 - CHARBONNIER
+#     descriptor: 5             # 0 - SURF_UPRIGHT, 1 - SURF, 2 - MSURF_UPRIGHT
+                                # 3 - MSURF, 4 - MLDB_UPGRIGHT, 5 - MLDB
+
+AKAZE:
+    nFeautres: 0
+    oMax: 4
+    nSubLevels: 4
+    dThreshold: 0.001
+    matcher: BruteForce-Hamming
+
+# ==============================================================================
+# Default parameters for opencv BRISK
+# BRISK:
+#     threshold: 30
+#     octaves: 3
+
+BRISK:
+    thres: 20
+    octaves: 3
+    matcher: BruteForce-Hamming

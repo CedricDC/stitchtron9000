@@ -1,12 +1,14 @@
 #ifndef STITCHTRON9000_EXTRACTOR_NODE_H_
 #define STITCHTRON9000_EXTRACTOR_NODE_H_
 
+#include <mutex>
+
 #include <ros/ros.h>
 #include <image_transport/image_transport.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/CameraInfo.h>
 
-#include <mutex>
+#include "feature/feature2d.h"
 
 namespace s9000 {
 namespace extractor {
@@ -25,6 +27,7 @@ class ExtractorNode {
   image_transport::CameraSubscriber sub_camera_;
   ros::Publisher pub_key_frame_;
   std::mutex connect_mutex_;
+  cv::Ptr<cv::Feature2D> feat2d_;
   int queue_size_;
 };
 

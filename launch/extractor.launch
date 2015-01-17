@@ -7,6 +7,8 @@
         output="$(arg output)" ns="$(arg camera)">
         <!-- parameters -->
         <param name="queue_size" type="int" value="$(arg queue_size)"/>
+        <rosparam command="load" file="$(find stitchtron9000)/param/extractor.yml"/>
+        <rosparam command="load" file="$(find stitchtron9000)/param/feature2d.yml"/>
 
         <!-- remappings -->
         <remap from="~image" to="image_rect_color"/>

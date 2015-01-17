@@ -5,9 +5,10 @@ set(EXTRACTOR_SRC
 
 add_executable(extractor_node ${EXTRACTOR_SRC})
 
-add_dependencies(extractor_node ${catkin_EXPORTED_TARGETS})
+add_dependencies(extractor_node ${catkin_EXPORTED_TARGETS} feature)
 
 target_link_libraries(extractor_node
     ${catkin_LIBRARIES}
     ${OpenCV_LIBRARIES}
+    feature
     )
