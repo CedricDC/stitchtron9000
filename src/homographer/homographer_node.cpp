@@ -53,13 +53,11 @@ void keyframe_cb(const stitchtron9000::KeyFrame& msg) {
       // find in previous points
       int pos_prev =
           std::find(id_prev.begin(), id_prev.end(), fet) - id_prev.begin();
-      std::cout << "pose_prev: " << pos_prev;
       tracked_pts_prev.push_back(points_prev[pos_prev]);
 
       // find in current (new) points
       int pos_curr =
           std::find(id_curr.begin(), id_curr.end(), fet) - id_curr.begin();
-      std::cout << " pose_curr: " << pos_curr << std::endl;
       tracked_pts_curr.push_back(points_curr[pos_curr]);
     }
     ROS_ASSERT_MSG(tracked_pts_curr.size() == tracked_pts_prev.size(),
