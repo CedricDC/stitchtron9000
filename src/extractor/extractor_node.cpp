@@ -62,7 +62,7 @@ void ExtractorNode::cameraCb(const sensor_msgs::ImageConstPtr& image_msg,
 
   ///@todo: change all these magic numbers later
   if (!prev_image_.empty()) {
-    ROS_INFO("Tracking features");
+    ROS_INFO_THROTTLE(4, "Tracking features");
     // Not the first image, so we do tracking here
     ROS_ASSERT_MSG(!prev_features_.empty(), "No tracked features");
 
@@ -121,7 +121,7 @@ void ExtractorNode::cameraCb(const sensor_msgs::ImageConstPtr& image_msg,
 
   if (prev_features_.size() < 600) {
     // Too few features, this is a key frame and we detect more features
-    ROS_INFO("Adding a new keyframe");
+    ROS_WARN("Adding a new keyframe");
     stitchtron9000::KeyFrame key_frame;
     key_frame.header = image_msg->header;
 
