@@ -1,6 +1,8 @@
+#include <iostream>
 #include "feature/visualization.h"
 
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 namespace s9000 {
 namespace feature {
@@ -56,8 +58,21 @@ void drawTrackes(const cv::Mat &image1,
                  const std::vector<cv::Point2f> &corners1,
                  const cv::Mat &image2,
                  const std::vector<cv::Point2f> &corners2,
-                 const std::vector<uchar> &matches, cv::Mat &image_match) {
-  // Not implemented
+                 const std::vector<uchar> &matches, cv::Mat &image_track) {
+  double alpha = 0.2;
+  double beta = (1.0 - alpha);
+  cv::addWeighted(image1, alpha, image2, beta, 0.0, image_track);
+  // Process matches
+  std::vector<uchar> matches_;
+  if (matches.empty()) {
+    matches_ = std::vector<uchar>(corners2.size(), 1);
+  } else {
+    matches_ = matches;
+  }
+  for (size_t i = 0; i < matches_.size(); ++i) {
+    cv::circle(image_track, corners2[i], 2, CV_BLUE, -1, CV_AA);
+    cv::line(image_track, corners1[i], corners2[i], CV_RED, 2);
+  }
 }
 
 void drawMatches(const cv::Mat &image1,

@@ -7,6 +7,7 @@
 #include <image_transport/image_transport.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/CameraInfo.h>
+#include <stitchtron9000/Feature.h>
 
 #include "feature/feature2d.h"
 
@@ -27,8 +28,10 @@ class ExtractorNode {
   image_transport::CameraSubscriber sub_camera_;
   ros::Publisher pub_key_frame_;
   std::mutex connect_mutex_;
-  cv::Ptr<cv::Feature2D> feat2d_;
-  std::vector<cv::KeyPoint> prev_keypoints_;
+  cv::Ptr<cv::FeatureDetector> detector_;
+  std::vector<stitchtron9000::Feature> prev_features_;
+  cv::Mat prev_image_;
+  int feature_id_ = 0;
   int queue_size_;
 };
 
