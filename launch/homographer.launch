@@ -1,10 +1,9 @@
 <launch>
 	<arg name="camera" default="color"/>
 	<arg name="output" default="screen"/>
-	<arg name="queue_size" default="5"/>
 
 	<node pkg="stitchtron9000" type="homographer_node" name="homographer"
-		output="$(arg output)" ns="$(arg camera)">
+        output="$(arg output)" ns="$(arg camera)">
 
 		<!-- remappings -->
 		<remap from="~key_frame" to="key_frame"/>
