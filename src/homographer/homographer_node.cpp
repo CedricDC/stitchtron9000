@@ -9,7 +9,6 @@
 static stitchtron9000::Homography hom_curr;		// to store current homography matrix
 static std::vector<cv::Point2f> points_prev;	// for coordinates of current keyframe
 static std::vector<int> id_prev;				// for indices of current keyframe
-static bool first_run = 1;						// to check for first run
 
 static ros::Subscriber sub_keyframe;
 static ros::Publisher pub_homography;
@@ -22,9 +21,8 @@ void keyframe_cb( const stitchtron9000::KeyFrame& msg ) {
 	
 	std::vector<cv::Point2f> points_curr;		// for coordinates of current keyframe
 	std::vector<int> id_curr;					// for indices of current keyframe
-	std::vector<int> common_id;					// for indices of features in both images
-	std::vector<cv::Point2f> common_pts_prev;
-	std::vector<cv::Point2f> common_pts_curr;
+	std::vector<cv::Point2f> tracked_pts_prev;
+	std::vector<cv::Point2f> tracked_pts_curr;
 
 	// 1) copy all features	
 	for(auto & fet:msg.features) {
@@ -32,8 +30,7 @@ void keyframe_cb( const stitchtron9000::KeyFrame& msg ) {
 		id_curr.push_back(fet.id);							// constructing image index vector
 	}
 
-	if (first_run) {
-		first_run = 0;
+	if (id_prev.empty()) {
 		ROS_INFO("First image received");
 		
 		// Return identity matrix
@@ -49,32 +46,29 @@ void keyframe_cb( const stitchtron9000::KeyFrame& msg ) {
 	}
 	else {
 		ROS_INFO("New points copied");
-		// 2) intersect id vectors to get ids both in previous and current image
-		std::set_intersection(id_prev.begin(),id_prev.end(),id_curr.begin(),id_curr.end(),back_inserter(common_id));
-
-		// 3) now fill two new vectors with common points
-		//    since we constructed the common vector as intersection, 
+		// 2) now fill two new vectors with tracked points
+		//    since we constructed the tracked vector as intersection, 
 		//	  the element will certainly be present (not rechecking)
-		for (auto & fet:common_id) {
+		for (auto & fet:msg.tracked_ids) {
 			// find in previous points
 			int pos_prev = find(id_prev.begin(),id_prev.end(),fet) - id_prev.begin();
-			common_pts_prev.push_back(points_prev[pos_prev]);
+			tracked_pts_prev.push_back(points_prev[pos_prev]);
 
 			// find in current (new) points
 			int pos_curr = find(id_curr.begin(),id_curr.end(),fet) - id_curr.begin();
-			common_pts_curr.push_back(points_curr[pos_curr]);
+			tracked_pts_curr.push_back(points_curr[pos_curr]);
 		}
 		ROS_INFO("Common elements extracted");
 
 		// 4) compute fundamental matrix and prune point vectors accordingly
 		std::vector<uchar> status;
-		cv::findFundamentalMat(common_pts_prev,common_pts_curr,CV_FM_RANSAC,3,0.99,status);
+		cv::findFundamentalMat(tracked_pts_prev,tracked_pts_curr,CV_FM_RANSAC,3,0.99,status);
 
 		int ind = 0;
 		for (auto & it:status) {
 			if (!it) { // if outlier, kick from vector
-				common_pts_prev.erase(common_pts_prev.begin()+ind);
-				common_pts_curr.erase(common_pts_curr.begin()+ind);
+				tracked_pts_prev.erase(tracked_pts_prev.begin()+ind);
+				tracked_pts_curr.erase(tracked_pts_curr.begin()+ind);
 			}
 			else {
 				++ind;
@@ -82,7 +76,7 @@ void keyframe_cb( const stitchtron9000::KeyFrame& msg ) {
 		}
 
 		// 5) extract homography matrix
-		cv::Mat homography_mat = findHomography(common_pts_prev,common_pts_curr);
+		cv::Mat homography_mat = findHomography(tracked_pts_prev,tracked_pts_curr);
 
 		// copy matrix into c++ container and publish
 		for (int i=0; i<9; ++i) {
