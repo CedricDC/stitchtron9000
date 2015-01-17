@@ -7,7 +7,6 @@ namespace feature {
 
 cv::Ptr<cv::Feature2D> Feature2D::create(const ros::NodeHandle &pnh,
                                          const std::string &name) {
-  // NodeHandle of Feature2D
   ros::NodeHandle algo_nh(pnh, name);
   auto algo = cv::Feature2D::create(name);
 
@@ -37,7 +36,6 @@ cv::Ptr<cv::Feature2D> Feature2D::create(const ros::NodeHandle &pnh,
 
 cv::Ptr<cv::FeatureDetector> FeatureDetector::create(const ros::NodeHandle &pnh,
                                                      const std::string &name) {
-  // NodeHandle of FeatureDetector
   ros::NodeHandle algo_nh(pnh, name);
   auto algo = cv::FeatureDetector::create(name);
 

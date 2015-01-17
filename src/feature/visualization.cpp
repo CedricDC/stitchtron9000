@@ -34,12 +34,20 @@ void drawKeypoints(const cv::Mat &image,
 }
 
 void drawMatches(const cv::Mat &image1,
+                 const std::vector<cv::Point2f> &corners1,
+                 const cv::Mat &image2,
+                 const std::vector<cv::Point2f> &corners2,
+                 const std::vector<uchar> &matches, cv::Mat &image_match) {
+  // Not implemented
+}
+
+void drawMatches(const cv::Mat &image1,
                  const std::vector<cv::KeyPoint> &keypoints1,
                  const cv::Mat &image2,
                  const std::vector<cv::KeyPoint> &keypoints2,
                  const std::vector<cv::DMatch> &matches, cv::Mat &image_match,
                  const std::vector<uchar> &matches_mask) {
-  // Such consistency in opencv where in drawMachages the type of mask is
+  // Such consistency in opencv where in drawMatches the type of mask is
   // std::vector<char> instead of std::vector<uchar> or cv::Mat
   std::vector<char> mask(matches_mask.cbegin(), matches_mask.cend());
   cv::drawMatches(image1, keypoints1, image2, keypoints2, matches, image_match,

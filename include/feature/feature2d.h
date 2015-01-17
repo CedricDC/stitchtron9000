@@ -19,16 +19,8 @@ class FeatureDetector {
                                              const std::string& name);
 };
 
-class CornerDetector {
-};
+class CornerDetector {};
 
-/**
- * @brief SetCvAlgorithmParam
- * @param algorithm
- * @param fnh
- * @param param_name
- * @param default_value
- */
 template <typename T>
 void setCvAlgorithmParam(cv::Algorithm* algo, const ros::NodeHandle& fnh,
                          const std::string& param_name, T default_value) {
@@ -37,7 +29,7 @@ void setCvAlgorithmParam(cv::Algorithm* algo, const ros::NodeHandle& fnh,
   algo->set(param_name, value);
 }
 
-void printCvAlgorithmParams(cv::Algorithm* algorithm);
+void printCvAlgorithmParams(cv::Algorithm* algo);
 
 }  // namespace featur
 }  // namespace s9000

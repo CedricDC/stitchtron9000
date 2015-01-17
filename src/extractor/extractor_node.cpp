@@ -5,6 +5,7 @@
 #include <stitchtron9000/KeyFrame.h>
 #include <stitchtron9000/Homography.h>
 #include <feature/feature2d.h>
+#include <feature/visualization.h>
 
 #include <opencv2/highgui/highgui.hpp>
 
@@ -53,7 +54,11 @@ void ExtractorNode::cameraCb(const sensor_msgs::ImageConstPtr& image_msg,
   const cv::Mat image =
       cv_bridge::toCvCopy(image_msg, sensor_msgs::image_encodings::MONO8)
           ->image;
-  cv::imshow("image", image);
+  cv::Mat display;
+  std::vector<cv::KeyPoint> keypoints;
+  feat2d_->detect(image, keypoints);
+  feature::drawKeypoints(image, keypoints, display);
+  cv::imshow("display", display);
   cv::waitKey(1);
 
   // Publish dummy message

@@ -22,6 +22,12 @@ void drawKeypoints(const cv::Mat &image,
                    cv::Mat &image_out);
 
 void drawMatches(const cv::Mat &image1,
+                 const std::vector<cv::Point2f> &corners1,
+                 const cv::Mat &image2,
+                 const std::vector<cv::Point2f> &corners2,
+                 const std::vector<uchar> &matches, cv::Mat &image_match);
+
+void drawMatches(const cv::Mat &image1,
                  const std::vector<cv::KeyPoint> &keypoints1,
                  const cv::Mat &image2,
                  const std::vector<cv::KeyPoint> &keypoints2,
