@@ -9,6 +9,8 @@
 #include <image_transport/subscriber_filter.h>
 #include <sensor_msgs/Image.h>
 
+#include <opencv2/opencv.hpp>
+
 #include <stitchtron9000/Homography.h>
 
 #include <memory>
@@ -46,6 +48,10 @@ private:
   std::shared_ptr<message_filters::Synchronizer<SyncPolicy>> sync_;
   
   ros::Publisher pub_image_;
+  
+  int map_width_, map_height_;
+  cv::Mat mosaic_;
+  cv::Mat homography_chain_;
 };
 
 } //  namespace mosaicer
