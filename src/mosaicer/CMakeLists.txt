@@ -15,3 +15,11 @@ target_link_libraries(mosaicer_node
   ${catkin_LIBRARIES}
   ${OpenCV_LIBRARIES}
   )
+
+add_executable(mosaicer_test
+  test/test_warping.cpp
+  )
+
+target_link_libraries(mosaicer_test
+  ${OpenCV_LIBRARIES}
+  )
