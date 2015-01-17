@@ -34,15 +34,15 @@ void keyframe_cb( const stitchtron9000::KeyFrame& msg ) {
 		ROS_INFO("First image received");
 		
 		// Return identity matrix
-		hom_curr.homography[1];
-		hom_curr.homography[0];
-		hom_curr.homography[0];
-		hom_curr.homography[0];
-		hom_curr.homography[1];
-		hom_curr.homography[0];
-		hom_curr.homography[0];
-		hom_curr.homography[0];
-		hom_curr.homography[1];
+		hom_curr.homography[0] = hom_curr.homography[4] = hom_curr.homography[8] = 1;
+
+		std::cout << "Initial homography matrix: " << std::endl;
+		for ( int i=0; i<3; ++i ) {
+			std::cout 
+				<< hom_curr.homography[0+3*i] << "," 
+				<< hom_curr.homography[1+3*i] << "," 
+				<< hom_curr.homography[2+3*i] << "," << std::endl;
+		}
 	}
 	else {
 		ROS_INFO("New points copied");
@@ -51,11 +51,11 @@ void keyframe_cb( const stitchtron9000::KeyFrame& msg ) {
 		//	  the element will certainly be present (not rechecking)
 		for (auto & fet:msg.tracked_ids) {
 			// find in previous points
-			int pos_prev = find(id_prev.begin(),id_prev.end(),fet) - id_prev.begin();
+			int pos_prev = std::find(id_prev.begin(),id_prev.end(),fet) - id_prev.begin();
 			tracked_pts_prev.push_back(points_prev[pos_prev]);
 
 			// find in current (new) points
-			int pos_curr = find(id_curr.begin(),id_curr.end(),fet) - id_curr.begin();
+			int pos_curr = std::find(id_curr.begin(),id_curr.end(),fet) - id_curr.begin();
 			tracked_pts_curr.push_back(points_curr[pos_curr]);
 		}
 		ROS_INFO("Common elements extracted");
@@ -76,7 +76,7 @@ void keyframe_cb( const stitchtron9000::KeyFrame& msg ) {
 		}
 
 		// 5) extract homography matrix
-		cv::Mat homography_mat = findHomography(tracked_pts_prev,tracked_pts_curr);
+		cv::Mat homography_mat = cv::findHomography(tracked_pts_prev,tracked_pts_curr);
 
 		// copy matrix into c++ container and publish
 		for (int i=0; i<9; ++i) {
