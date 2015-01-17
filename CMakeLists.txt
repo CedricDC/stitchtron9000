@@ -32,4 +32,4 @@ include_directories(
 add_subdirectory(src/feature)
 add_subdirectory(src/extractor)
 add_subdirectory(src/homographer)
-include(Mosaicer.txt)
+add_subdirectory(src/mosaicer)

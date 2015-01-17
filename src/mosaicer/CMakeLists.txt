@@ -1,6 +1,6 @@
 set(Mosaicer_NODE_SOURCES
-  src/mosaicer/mosaicer_node.cpp
-  src/mosaicer/mosaicer_main.cpp
+  mosaicer_node.cpp
+  mosaicer_main.cpp
   )
 
 add_executable(mosaicer_node
