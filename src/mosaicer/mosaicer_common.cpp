@@ -8,7 +8,8 @@ namespace mosaicer {
 
 cv::Mat fitHomography(const cv::Mat& H,
                       const cv::Size src_size,
-                      cv::Rect_<double> &dst_rect) {
+                      cv::Rect_<double> &dst_rect, 
+                      double adjusted_scale) {
   std::vector<cv::Mat> pts_0(4), pts_1(4);
    
   //  corners of the source image
@@ -40,8 +41,8 @@ cv::Mat fitHomography(const cv::Mat& H,
   
   //  subtract the origin
   for (int i=0; i < 4; i++) {
-    pts_1[i].at<double>(0,0) -= ox;
-    pts_1[i].at<double>(1,0) -= oy;
+    pts_1[i].at<double>(0,0) = (pts_1[i].at<double>(0,0) - ox) * adjusted_scale;
+    pts_1[i].at<double>(1,0) = (pts_1[i].at<double>(1,0) - oy) * adjusted_scale;
   }
   
   //  convert to cv::Point2f for cv::getPerspectiveTransform
@@ -57,7 +58,8 @@ cv::Mat fitHomography(const cv::Mat& H,
   cv::Mat Hnew = cv::getPerspectiveTransform(ptsf_0, ptsf_1);
  
   //  output the rect under the original homography
-  dst_rect = cv::Rect_<double>(ox,oy,sx,sy);
+  dst_rect = cv::Rect_<double>(ox*adjusted_scale,oy*adjusted_scale,
+                               sx*adjusted_scale,sy*adjusted_scale);
   return Hnew;
 }
 

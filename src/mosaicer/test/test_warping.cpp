@@ -39,19 +39,17 @@ int main(int, char **) {
   roi.width = std::floor(nrect.width);
   roi.height = std::floor(nrect.height);
 
+  std::cout << nrect << std::endl;
+  
   //  warp to the target region  
-  cv::Mat map_slice(roi.size(),map.type());
+  cv::Mat map_slice(roi.size(), map.type());
+  cv::Mat mask_slice(roi.size(), CV_8UC1);
+  mask_slice.setTo(255);
   cv::warpPerspective(I2_small, map_slice, Hnew, roi.size());
+  cv::warpPerspective(mask_slice, mask_slice, Hnew, roi.size());
   
-  cv::Mat small_map;
-  cv::resize(map,small_map,cv::Size(map.cols / 5, map.rows / 5));
-  cv::imshow("map", map_slice);
-  
-  cv::warpPerspective(I2_small, map, H, cv::Size(map.cols,map.rows));
-  
-  //cv::Mat small_map;
-  cv::resize(map,small_map,cv::Size(map.cols / 5, map.rows / 5));
-  cv::imshow("map2", small_map);
+  cv::imshow("map", map_slice);  
+  cv::imshow("mask", mask_slice);
   
   cv::waitKey(0);
   

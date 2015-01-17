@@ -11,7 +11,8 @@ namespace mosaicer {
 
 cv::Mat fitHomography(const cv::Mat& H,
                       const cv::Size src_size,
-                      cv::Rect_<double> &dst_rect);
+                      cv::Rect_<double> &dst_rect,
+                      double adjusted_scale = 1.0);
 
 }
 }
