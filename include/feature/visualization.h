@@ -12,6 +12,9 @@
 namespace s9000 {
 namespace feature {
 
+cv::Mat copyToGray(const cv::Mat& image);
+cv::Mat copyToColor(const cv::Mat& image);
+
 void drawCorners(const cv::Mat &image, const std::vector<cv::Point2f> &corners,
                  cv::Mat &image_out);
 
@@ -21,7 +24,7 @@ void drawKeypoints(const cv::Mat &image,
                    const std::vector<cv::KeyPoint> &keypoints,
                    cv::Mat &image_out);
 
-void drawMatches(const cv::Mat &image1,
+void drawTrackes(const cv::Mat &image1,
                  const std::vector<cv::Point2f> &corners1,
                  const cv::Mat &image2,
                  const std::vector<cv::Point2f> &corners2,
