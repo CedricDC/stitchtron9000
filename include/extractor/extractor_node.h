@@ -18,9 +18,9 @@ class ExtractorNode {
   explicit ExtractorNode(const ros::NodeHandle& pnh);
 
  private:
-  void CameraCb(const sensor_msgs::ImageConstPtr& image_msg,
+  void cameraCb(const sensor_msgs::ImageConstPtr& image_msg,
                 const sensor_msgs::CameraInfoConstPtr& cinfo_msg);
-  void ConnectCb();
+  void connectCb();
 
   ros::NodeHandle pnh_;
   image_transport::ImageTransport it_;
