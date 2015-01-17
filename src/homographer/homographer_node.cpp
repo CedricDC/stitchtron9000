@@ -15,7 +15,7 @@ static std::vector<int> id_prev;  // for indices of current keyframe
 static ros::Subscriber sub_keyframe;
 static ros::Publisher pub_homography;
 
-void print_homography(const stitchtron9000::Homography &homography); 
+void print_homography(const stitchtron9000::Homography& homography);
 
 // Callback for KeyFrame
 void keyframe_cb(const stitchtron9000::KeyFrame& msg) {
@@ -28,7 +28,7 @@ void keyframe_cb(const stitchtron9000::KeyFrame& msg) {
   std::vector<cv::Point2f> tracked_pts_curr;
 
   // 1) copy all features
-  for (auto& fet : msg.features) {
+  for (const auto& fet : msg.features) {
     points_curr.push_back(
         cv::Point2f(fet.x, fet.y));  // constructing feature vector
     id_curr.push_back(fet.id);       // constructing image index vector
@@ -42,67 +42,74 @@ void keyframe_cb(const stitchtron9000::KeyFrame& msg) {
         1;
 
     std::cout << "Initial homography matrix: " << std::endl;
-	print_homography(hom_curr);
-   } 
-  else {
+    print_homography(hom_curr);
+  } else {
     ROS_INFO("New points copied");
+
     // 2) now fill two new vectors with tracked points
     //    since we constructed the tracked vector as intersection,
     //	  the element will certainly be present (not rechecking)
-    for (auto& fet : msg.tracked_ids) {
+    for (const auto& fet : msg.tracked_ids) {
       // find in previous points
       int pos_prev =
           std::find(id_prev.begin(), id_prev.end(), fet) - id_prev.begin();
+      std::cout << "pose_prev: " << pos_prev;
       tracked_pts_prev.push_back(points_prev[pos_prev]);
 
       // find in current (new) points
       int pos_curr =
           std::find(id_curr.begin(), id_curr.end(), fet) - id_curr.begin();
+      std::cout << " pose_curr: " << pos_curr << std::endl;
       tracked_pts_curr.push_back(points_curr[pos_curr]);
     }
+    ROS_ASSERT_MSG(tracked_pts_curr.size() == tracked_pts_prev.size(),
+                   "points size mismatch");
     ROS_INFO("Common elements extracted");
 
     // 4) compute fundamental matrix and prune point vectors accordingly
-    std::vector<uchar> status;
-    cv::findFundamentalMat(tracked_pts_prev, tracked_pts_curr, CV_FM_RANSAC, 3,
-                           0.99, status);
+    //    std::vector<uchar> status;
+    //    cv::findFundamentalMat(tracked_pts_prev, tracked_pts_curr,
+    //    CV_FM_RANSAC, 3,
+    //                           0.99, status);
 
-    int ind = 0;
-    for (auto& it : status) {
-      if (!it) {  // if outlier, kick from vector
-        tracked_pts_prev.erase(tracked_pts_prev.begin() + ind);
-        tracked_pts_curr.erase(tracked_pts_curr.begin() + ind);
-      } else {
-        ++ind;
-      }
-    }
+    //    int ind = 0;
+    //    for (auto& it : status) {
+    //      if (!it) {  // if outlier, kick from vector
+    //        tracked_pts_prev.erase(tracked_pts_prev.begin() + ind);
+    //        tracked_pts_curr.erase(tracked_pts_curr.begin() + ind);
+    //      } else {
+    //        ++ind;
+    //      }
+    //    }
 
     // 5) extract homography matrix
     cv::Mat homography_mat =
-        cv::findHomography(tracked_pts_prev, tracked_pts_curr);
+        cv::findHomography(tracked_pts_prev, tracked_pts_curr, CV_RANSAC);
 
     // copy matrix into c++ container and publish
-    for (int i = 0; i < 9; ++i) {
-      hom_curr.homography[i] = homography_mat.data[i];
-    };
-	
-	std::cout << "New homography matrix: " << std::endl;
-	print_homography(hom_curr);
+    for (int i = 0; i < 3; ++i) {
+      const auto* p = homography_mat.ptr<double>(i);
+      for (int j = 0; j < 3; ++j) {
+        hom_curr.homography[j + 3 * i] = p[j];
+      }
+    }
+
+    std::cout << "New homography matrix: " << std::endl;
+    print_homography(hom_curr);
   }
 
   // publish homography and update previous points
   pub_homography.publish(hom_curr);
-  std::vector<cv::Point2f> points_prev = points_curr;
+  points_prev = points_curr;
   id_prev = id_curr;
 }
 
-void print_homography(const stitchtron9000::Homography &homography) {
-		for ( int i=0; i<3; ++i ) {
-			std::cout 
-				<< homography.homography[0+3*i] << "," 
-				<< homography.homography[1+3*i] << "," 
-				<< homography.homography[2+3*i] << "," << std::endl;
-		}
+void print_homography(const stitchtron9000::Homography& homography) {
+  for (int i = 0; i < 3; ++i) {
+    std::cout << homography.homography[0 + 3 * i] << ","
+              << homography.homography[1 + 3 * i] << ","
+              << homography.homography[2 + 3 * i] << "," << std::endl;
+  }
 }
 
 int main(int argc, char** argv) {
