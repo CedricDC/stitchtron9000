@@ -5,6 +5,8 @@
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
 
+#include <mosaicer/mosaicer_common.hpp>
+
 using std::make_shared;
 
 namespace s9000 {
@@ -24,8 +26,8 @@ Node::Node(const ros::NodeHandle &nh) : pnh_(nh) {
   
   pub_image_ = pnh_.advertise<sensor_msgs::Image>("mosaic_image", 1);
   
-  pnh_.param("map_width", map_width_, 10000);
-  pnh_.param("map_height", map_height_, 10000);
+  pnh_.param("map_width", map_width_, 5000);
+  pnh_.param("map_height", map_height_, 5000);
   
   /// @todo: add scale parameter...
   
@@ -61,8 +63,8 @@ void Node::callback(const sensor_msgs::ImageConstPtr& image,
     mosaic_ = cv::Mat(map_width_, map_height_, input_image.type());
     mosaic_.setTo(cv::Scalar(0)); //  black?
     
-    /// @todo: initialize base homograpy
-    
+    //   initialize the base homography
+    homography_chain_ = cv::Mat::eye(3,3,CV_64F);
   } else {
     //  subsequent image, make sure type matches
     if (input_image.type() != mosaic_.type()) {
@@ -77,10 +79,30 @@ void Node::callback(const sensor_msgs::ImageConstPtr& image,
   ROS_INFO_STREAM("Received homography : " << H);
   ROS_INFO_STREAM("Composite homography : " << compounded_H);
   
-  //  warp onto mosaic
-  cv::warpPerspective(input_image, mosaic_, compounded_H, 
-                      cv::Size(mosaic_.cols, mosaic_.rows), 
-                      cv::INTER_LINEAR);
+  //  adjust our homography
+  const cv::Size src_size(input_image.cols, input_image.rows);
+  
+  cv::Rect_<double> dst_rect_f;
+  const cv::Mat adjusted_H = fitHomography(compounded_H,
+                                           src_size, dst_rect_f, 1.0);
+  const cv::Rect dst_rect = dst_rect_f; //  rounded bounding box
+  
+  ROS_INFO_STREAM("Adjusted homography : " << adjusted_H);
+  
+  //  warp both the input and a white mask
+  cv::Mat input_warped(dst_rect.size(), mosaic_.type());
+  cv::Mat region_mask(src_size, CV_8UC1);
+  region_mask.setTo(255);
+  
+  cv::warpPerspective(input_image, input_warped, adjusted_H, 
+                      dst_rect.size(), cv::INTER_LINEAR);
+  cv::warpPerspective(region_mask, region_mask, adjusted_H,
+                      dst_rect.size(), cv::INTER_LINEAR);
+  
+  //  copy using the mask into the ROI
+  /// @todo: add some blending...
+  cv::Mat target = mosaic_(dst_rect);
+  input_warped.copyTo(target, region_mask);
   
   //  draw the updated image
   cv::imshow("mosaic", mosaic_);

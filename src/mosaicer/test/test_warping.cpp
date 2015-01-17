@@ -30,7 +30,7 @@ int main(int, char **) {
   cv::Rect_<double> nrect;
   const cv::Mat Hnew = fitHomography(H,
                                      cv::Size(I2_small.cols,I2_small.rows),
-                                     nrect);
+                                     nrect, 0.25);
   
   //  calculate pixel ROI
   cv::Rect roi;
@@ -43,7 +43,7 @@ int main(int, char **) {
   
   //  warp to the target region  
   cv::Mat map_slice(roi.size(), map.type());
-  cv::Mat mask_slice(roi.size(), CV_8UC1);
+  cv::Mat mask_slice(cv::Size(I2_small.cols,I2_small.rows), CV_8UC1);
   mask_slice.setTo(255);
   cv::warpPerspective(I2_small, map_slice, Hnew, roi.size());
   cv::warpPerspective(mask_slice, mask_slice, Hnew, roi.size());
