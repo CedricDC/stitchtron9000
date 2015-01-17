@@ -41,6 +41,7 @@ void Node::callback(const sensor_msgs::ImageConstPtr& image,
                     const sensor_msgs::CameraInfoConstPtr& info, 
                     const stitchtron9000::HomographyConstPtr& homo) {
   
+  ROS_INFO("Inside callback");
   cv_bridge::CvImageConstPtr bridged = cv_bridge::toCvShare(image);
   if (!bridged || bridged->image.empty()) {
     ROS_ERROR("Failed to get cv_bridge image");
