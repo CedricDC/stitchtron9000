@@ -1,6 +1,6 @@
 #include "feature/feature2d.h"
 
-#include <opencv2/nonfree/nonfree.hpp>
+// #include <opencv2/nonfree/nonfree.hpp>
 
 namespace s9000 {
 namespace feature {
