@@ -1,10 +1,12 @@
 <launch>
-    <arg name="output" default="screen"/> 
+    <arg name="output" default="screen"/>
+    <arg name="bagfile"/>
 
     <include file="$(find stitchtron9000)/launch/test_extractor.launch">
         <arg name="output" value="$(arg output)"/>
-    </include> 
-   
+        <arg name="bagfile" value="$(arg bagfile)"/>
+    </include>
+
     <include file="$(find stitchtron9000)/launch/homographer.launch">
     </include>
 </launch>

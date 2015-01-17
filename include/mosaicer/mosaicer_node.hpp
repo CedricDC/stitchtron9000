@@ -32,7 +32,7 @@ private:
                 const sensor_msgs::CameraInfoConstPtr&,
                 const stitchtron9000::HomographyConstPtr&);
   
-  static constexpr size_t kROSQueueSize = 100;
+  static constexpr size_t kROSQueueSize = 10000;
   
   ros::NodeHandle pnh_;
   std::shared_ptr<image_transport::ImageTransport> it_;
