@@ -37,12 +37,7 @@ void keyframe_cb( const stitchtron9000::KeyFrame& msg ) {
 		hom_curr.homography[0] = hom_curr.homography[4] = hom_curr.homography[8] = 1;
 
 		std::cout << "Initial homography matrix: " << std::endl;
-		for ( int i=0; i<3; ++i ) {
-			std::cout 
-				<< hom_curr.homography[0+3*i] << "," 
-				<< hom_curr.homography[1+3*i] << "," 
-				<< hom_curr.homography[2+3*i] << "," << std::endl;
-		}
+		print_homography(hom_curr);
 	}
 	else {
 		ROS_INFO("New points copied");
@@ -82,12 +77,24 @@ void keyframe_cb( const stitchtron9000::KeyFrame& msg ) {
 		for (int i=0; i<9; ++i) {
 			hom_curr.homography[i] = homography_mat.data[i];
 		};
+
+		std::cout << "New homography matrix: " << std::endl;
+		print_homography(hom_curr);
 	}
 	
 	// publish homography and update previous points	
 	pub_homography.publish(hom_curr);
 	std::vector<cv::Point2f> points_prev = points_curr;
 	std::vector<int> id_prev = id_curr;
+}
+
+void print_homography(const stitchtron9000::Homography &homography) {
+		for ( int i=0; i<3; ++i ) {
+			std::cout 
+				<< homography.homography[0+3*i] << "," 
+				<< homography.homography[1+3*i] << "," 
+				<< homography.homography[2+3*i] << "," << std::endl;
+		}
 }
 
 int main (int argc, char **argv) {
