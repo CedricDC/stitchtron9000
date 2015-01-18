@@ -116,7 +116,7 @@ int main(int argc, char** argv) {
   ros::NodeHandle pnh;
 
   // Publisher
-  ros::Publisher pub_homography =
+  pub_homography =
       pnh.advertise<stitchtron9000::Homography>("homography", 5);
 
   // Subscriber

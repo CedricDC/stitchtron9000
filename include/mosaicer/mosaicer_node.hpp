@@ -50,6 +50,7 @@ private:
   ros::Publisher pub_image_;
   
   int map_width_, map_height_;
+  int offset_x_, offset_y_;
   cv::Mat mosaic_;
   cv::Mat homography_chain_;
 };

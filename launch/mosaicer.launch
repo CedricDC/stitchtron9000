@@ -5,6 +5,7 @@
     <node pkg="stitchtron9000" type="mosaicer_node" name="mosaicer"
         output="$(arg output)" ns="$(arg camera)">
 
+        <remap from="~homography" to="homography"/>
         <remap from="~image" to="image_rect_color"/>
         <remap from="~camera_info" to="camera_info"/>
     </node>

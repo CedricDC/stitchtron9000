@@ -1,0 +1,12 @@
+<launch>
+    <arg name="output" default="log"/>
+    <arg name="bagfile" default="/media/gareth/External/bagfiles/pennpark.bag"/>
+
+    <include file="$(find stitchtron9000)/launch/test_homographer.launch">
+        <arg name="output" value="$(arg output)"/>
+        <arg name="bagfile" value="$(arg bagfile)"/>
+    </include>
+
+    <include file="$(find stitchtron9000)/launch/mosaicer.launch">
+    </include>
+</launch>

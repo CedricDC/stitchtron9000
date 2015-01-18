@@ -4,9 +4,11 @@
     <arg name="bag_rate" default="1"/>
     <arg name="output" default="screen"/>
 
+    <arg name="bagfile"/>
+
     <!-- rosbag -->
     <node pkg="rosbag" type="play" name="player" output="$(arg output)"
-        args="-r $(arg bag_rate) /media/Files/Repos/pennapps_ws/data_set/pennpark.bag">
+        args="-r $(arg bag_rate) $(arg bagfile)">
     </node>
 
     <!-- image_proc -->
@@ -17,5 +19,5 @@
     <!-- extractor -->
     <include file="$(find stitchtron9000)/launch/extractor.launch">
         <arg name="camera" value="$(arg camera)"/>
-    </include> 
+    </include>
 </launch>
