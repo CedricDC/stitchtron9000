@@ -151,16 +151,22 @@ void ExtractorNode::cameraCb(const sensor_msgs::ImageConstPtr& image_msg,
       feature.y = keypoint.pt.y;
       prev_features_.push_back(feature);
     }
+    /// hack
     ROS_INFO("Number of features in key frame: %d", (int)prev_features_.size());
     key_frame.features = prev_features_;
     pub_key_frame_.publish(key_frame);
+    // Save image to disk
+    const std::string file_name("home/chao/Desktop/" +
+                                std::to_string(image_id_++));
+    cv::imwrite(file_name, image);
+    ROS_INFO("Image saved to %s", file_name.c_str());
   }
 
   prev_image_ = image;
 
   // Visualization
-  //cv::imshow("display", display);
-  //cv::waitKey(1);
+  // cv::imshow("display", display);
+  // cv::waitKey(1);
 }
 
 }  // namespace extractor

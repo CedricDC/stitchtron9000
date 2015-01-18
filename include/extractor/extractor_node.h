@@ -33,6 +33,7 @@ class ExtractorNode {
   cv::Mat prev_image_;
   int feature_id_ = 0;
   int queue_size_;
+  int image_id_ = 0;
 };
 
 }  // namespace extractor
