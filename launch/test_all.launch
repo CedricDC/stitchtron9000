@@ -1,5 +1,5 @@
 <launch>
-    <arg name="output" default="screen"/>
+    <arg name="output" default="log"/>
     <arg name="bagfile" default="/media/gareth/External/bagfiles/pennpark.bag"/>
 
     <include file="$(find stitchtron9000)/launch/test_homographer.launch">

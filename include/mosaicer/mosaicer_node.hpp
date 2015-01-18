@@ -32,7 +32,7 @@ private:
                 const sensor_msgs::CameraInfoConstPtr&,
                 const stitchtron9000::HomographyConstPtr&);
   
-  static constexpr size_t kROSQueueSize = 10000;
+  static constexpr size_t kROSQueueSize = 100;
   
   ros::NodeHandle pnh_;
   std::shared_ptr<image_transport::ImageTransport> it_;
@@ -50,6 +50,7 @@ private:
   ros::Publisher pub_image_;
   
   int map_width_, map_height_;
+  int offset_x_, offset_y_;
   cv::Mat mosaic_;
   cv::Mat homography_chain_;
 };

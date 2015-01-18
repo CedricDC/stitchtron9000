@@ -159,8 +159,8 @@ void ExtractorNode::cameraCb(const sensor_msgs::ImageConstPtr& image_msg,
   prev_image_ = image;
 
   // Visualization
-  cv::imshow("display", display);
-  cv::waitKey(1);
+  //cv::imshow("display", display);
+  //cv::waitKey(1);
 }
 
 }  // namespace extractor
