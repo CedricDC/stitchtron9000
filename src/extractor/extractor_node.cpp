@@ -156,10 +156,10 @@ void ExtractorNode::cameraCb(const sensor_msgs::ImageConstPtr& image_msg,
     key_frame.features = prev_features_;
     pub_key_frame_.publish(key_frame);
     // Save image to disk
-    const std::string file_name("home/chao/Desktop/" +
-                                std::to_string(image_id_++));
-    cv::imwrite(file_name, image);
-    ROS_INFO("Image saved to %s", file_name.c_str());
+//    const std::string file_name("/home/gareth/Desktop/" +
+//                                std::to_string(image_id_++) + ".png");
+//    cv::imwrite(file_name, image);
+//    ROS_INFO("Image saved to %s", file_name.c_str());
   }
 
   prev_image_ = image;
