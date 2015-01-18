@@ -64,23 +64,7 @@ void keyframe_cb(const stitchtron9000::KeyFrame& msg) {
                    "points size mismatch");
     ROS_INFO("Common elements extracted");
 
-    // 4) compute fundamental matrix and prune point vectors accordingly
-    //    std::vector<uchar> status;
-    //    cv::findFundamentalMat(tracked_pts_prev, tracked_pts_curr,
-    //    CV_FM_RANSAC, 3,
-    //                           0.99, status);
-
-    //    int ind = 0;
-    //    for (auto& it : status) {
-    //      if (!it) {  // if outlier, kick from vector
-    //        tracked_pts_prev.erase(tracked_pts_prev.begin() + ind);
-    //        tracked_pts_curr.erase(tracked_pts_curr.begin() + ind);
-    //      } else {
-    //        ++ind;
-    //      }
-    //    }
-
-    // 5) extract homography matrix
+    // 3) extract homography matrix
     cv::Mat homography_mat =
         cv::findHomography(tracked_pts_curr, tracked_pts_prev, CV_RANSAC);
 
