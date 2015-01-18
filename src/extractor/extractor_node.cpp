@@ -39,6 +39,7 @@ ExtractorNode::ExtractorNode(const ros::NodeHandle& pnh) : pnh_(pnh), it_(pnh) {
   //      boost::bind(&ExtractorNode::ConnectCb, this);
   //  pub_key_frame_ = pnh_.advertise<stitchtron9000::KeyFrame>(
   //      "key_frame", 1, connect_cb, connect_cb);
+  cv::namedWindow("display", cv::WINDOW_NORMAL);
 }
 
 void ExtractorNode::connectCb() {
@@ -165,8 +166,8 @@ void ExtractorNode::cameraCb(const sensor_msgs::ImageConstPtr& image_msg,
   prev_image_ = image;
 
   // Visualization
-  // cv::imshow("display", display);
-  // cv::waitKey(1);
+  cv::imshow("display", display);
+  cv::waitKey(1);
 }
 
 }  // namespace extractor

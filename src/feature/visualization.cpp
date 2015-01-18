@@ -70,7 +70,7 @@ void drawTrackes(const cv::Mat &image1,
     matches_ = matches;
   }
   for (size_t i = 0; i < matches_.size(); ++i) {
-    cv::circle(image_track, corners2[i], 2, CV_BLUE, -1, CV_AA);
+    cv::circle(image_track, corners2[i], 3, CV_BLUE, -1, CV_AA);
     cv::line(image_track, corners1[i], corners2[i], CV_RED, 2);
   }
 }
