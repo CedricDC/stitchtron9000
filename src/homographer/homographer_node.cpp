@@ -82,7 +82,7 @@ void keyframe_cb(const stitchtron9000::KeyFrame& msg) {
 
     // 5) extract homography matrix
     cv::Mat homography_mat =
-        cv::findHomography(tracked_pts_prev, tracked_pts_curr, CV_RANSAC);
+        cv::findHomography(tracked_pts_curr, tracked_pts_prev, CV_RANSAC);
 
     // copy matrix into c++ container and publish
     for (int i = 0; i < 3; ++i) {

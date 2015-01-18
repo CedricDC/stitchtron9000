@@ -96,8 +96,8 @@ void Node::callback(const sensor_msgs::ImageConstPtr& image,
   cv::Rect dst_rect = dst_rect_f; //  rounded bounding box
   
   //  shift to origin
-  //dst_rect.x += offset_x_;
-  //dst_rect.y += offset_y_;
+  dst_rect.x += offset_x_;
+  dst_rect.y += offset_y_;
   
   ROS_INFO_STREAM("Adjusted homography : " << adjusted_H);
   
@@ -115,8 +115,19 @@ void Node::callback(const sensor_msgs::ImageConstPtr& image,
   
   //  copy using the mask into the ROI
   /// @todo: add some blending...
-  cv::Mat target = mosaic_(dst_rect);
-  input_warped.copyTo(target, region_mask);
+  
+  const auto edge_x = dst_rect.x + dst_rect.width;
+  const auto edge_y = dst_rect.y + dst_rect.height;
+  bool out_of_image = false;
+  if (dst_rect.x < 0 || dst_rect.y < 0 || 
+      edge_x > mosaic_.cols || edge_y > mosaic_.rows) {
+    out_of_image = true;
+  }
+   
+  if (!out_of_image) {
+    cv::Mat target = mosaic_(dst_rect);
+    input_warped.copyTo(target, region_mask);
+  }
   
   cv::Mat small;
   cv::resize(mosaic_,small,cv::Size(mosaic_.cols / 5, mosaic_.rows / 5));
