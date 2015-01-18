@@ -1,4 +1,9 @@
-add_executable(homographer_node homographer_node.cpp)
+set(HOMOGRAPHER_SRC
+	homographer_node.cpp
+	homographer_main.cpp
+	)
+
+add_executable(homographer_node ${HOMOGRAPHER_SRC})
 
 add_dependencies(homographer_node
   ${catkin_EXPORTED_TARGETS}
