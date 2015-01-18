@@ -6,7 +6,7 @@
 
     <!-- rosbag -->
     <node pkg="rosbag" type="play" name="player" output="$(arg output)"
-        args="-r $(arg bag_rate) /media/chao/Seagate/pennpark.bag">
+        args="-r $(arg bag_rate) /media/Files/Repos/pennapps_ws/data_set/pennpark.bag">
     </node>
 
     <!-- image_proc -->
