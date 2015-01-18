@@ -119,7 +119,7 @@ void ExtractorNode::cameraCb(const sensor_msgs::ImageConstPtr& image_msg,
     //    (int)prev_features_.size());
   }
 
-  if (prev_features_.size() < 600) {
+  if (prev_features_.size() < 750) {
     // Too few features, this is a key frame and we detect more features
     ROS_WARN("Adding a new keyframe");
     stitchtron9000::KeyFrame key_frame;
